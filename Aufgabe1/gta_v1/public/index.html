@@ -28,19 +28,23 @@
             <!-- ############### VS1Lab 1a Form 1 Start -->
             <form id="tag-form" action="/tagging" method="post">
 
-                <label for="latitude">Latitude:</label>
-                <input type="text" id="latitude_tag" name="latitude" required>
+                <fieldset>
+                    <legend>Add tag</legend>
 
-                <label for="longitude">Longitude:</label>
-                <input type="text" id="longitude_tag" name="longitude" required>
+                    <label for="latitude">Latitude:</label>
+                    <input type="text" id="latitude_tag" name="latitude" required>
 
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
+                    <label for="longitude">Longitude:</label>
+                    <input type="text" id="longitude_tag" name="longitude" required>
 
-                <label for="hashtag">Hashtag:</label>
-                <input type="text" id="hashtag" name="hashtag">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
 
-                <button type="submit">Absenden</button>
+                    <label for="hashtag">Hashtag:</label>
+                    <input type="text" id="hashtag" name="hashtag">
+
+                    <button type="submit">Absenden</button>
+                </fieldset>
 
             </form>
             <!-- ############### VS1Lab 1a Form 1 End -->
@@ -53,13 +57,18 @@
             <!-- ############### VS1Lab 1a Form 2 Start -->
             <form class="discovery__search" id="discoveryFilterForm" action="/discovery" method="post">
 
-                <label for="latitude">Searchterm:</label>
-                <input type="text" id="searchterm" name="searchterm" required>
+                <fieldset>
+                    <legend>Search tags</legend>
 
-                <input type="hidden" id="latitude_disc" name="latitude">
-                <input type="hidden" id="longitude_disc" name="longitude">
+                    <label for="latitude">Searchterm:</label>
+                    <input type="text" id="searchterm" name="searchterm" required>
 
-                <button type="submit">Absenden</button>
+                    <input type="hidden" id="latitude_disc" name="latitude" required>
+                    <input type="hidden" id="longitude_disc" name="longitude" required>
+
+                    <button type="submit">Absenden</button>
+
+                </fieldset>
 
             </form>
             <!-- ############### VS1Lab 1a Form 2 End -->
