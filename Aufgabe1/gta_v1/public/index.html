@@ -32,16 +32,17 @@
                     <legend>Add tag</legend>
 
                     <label for="latitude">Latitude:</label>
-                    <input type="text" id="latitude_tag" name="latitude" placeholder="z.B. 49.01379" required>
+                    <input type="text" id="latitude_tag" name="latitude" value="z.B. 49.01379" required readonly>
 
                     <label for="longitude">Longitude:</label>
-                    <input type="text" id="longitude_tag" name="longitude" placeholder="z.B. 8.404435" required>
+                    <input type="text" id="longitude_tag" name="longitude" value="z.B. 8.404435" required readonly>
 
                     <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" placeholder="z.B. Castle" required>
+                    <input type="text" id="name" name="name" placeholder="z.B. Castle" required maxlength="10">
 
                     <label for="hashtag">Hashtag:</label>
-                    <input type="text" id="hashtag" name="hashtag" placeholder="z.B. #sight">
+                    <input type="text" id="hashtag" name="hashtag" placeholder="z.B. #sight" pattern="#.{1,10}" 
+                    titel="Hashtags müssen mit `#` beginnen und dürfen dann noch 10 Buchstaben haben.">
 
                     <button type="submit">Absenden</button>
                 </fieldset>
