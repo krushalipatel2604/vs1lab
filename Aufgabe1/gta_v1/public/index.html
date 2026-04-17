@@ -28,7 +28,23 @@
             <!-- ############### VS1Lab 1a Form 1 Start -->
             <form id="tag-form" action="/tagging" method="post">
 
-                <!-- ... your code here ... -->
+                <fieldset>
+                    <legend>Add tag</legend>
+
+                    <label for="latitude">Latitude:</label>
+                    <input type="text" id="latitude_tag" name="latitude" placeholder="z.B. 49.01379" required>
+
+                    <label for="longitude">Longitude:</label>
+                    <input type="text" id="longitude_tag" name="longitude" placeholder="z.B. 8.404435" required>
+
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" placeholder="z.B. Castle" required>
+
+                    <label for="hashtag">Hashtag:</label>
+                    <input type="text" id="hashtag" name="hashtag" placeholder="z.B. #sight">
+
+                    <button type="submit">Absenden</button>
+                </fieldset>
 
             </form>
             <!-- ############### VS1Lab 1a Form 1 End -->
@@ -41,7 +57,18 @@
             <!-- ############### VS1Lab 1a Form 2 Start -->
             <form class="discovery__search" id="discoveryFilterForm" action="/discovery" method="post">
 
-                <!-- ... your code here ... -->
+                <fieldset>
+                    <legend>Search tags</legend>
+
+                    <label for="latitude">Searchterm:</label>
+                    <input type="text" id="searchterm" name="searchterm" placeholder="z.B. #edu" required>
+
+                    <input type="hidden" id="latitude_disc" name="latitude" required>
+                    <input type="hidden" id="longitude_disc" name="longitude" required>
+
+                    <button type="submit">Absenden</button>
+
+                </fieldset>
 
             </form>
             <!-- ############### VS1Lab 1a Form 2 End -->
