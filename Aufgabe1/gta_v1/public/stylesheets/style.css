@@ -46,7 +46,7 @@ a {
 
 /* ### TODO ### Styles for other HTML elements */
 
-/* ... your code here ... */
+
 
 
 /* Grid styles (no changes required) */
@@ -109,29 +109,141 @@ a {
 
 /* ### TODO ### Styles for Header Component */
 
-/* ... your code here ... */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3rem 3rem;
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+
+}
+
+.header__image {
+  width: 100px;
+  height: 100px;
+}
+
+.header__title {
+  font-size: xx-large;
+}
 
 
 /* ### TODO ### Styles for Main Component */
 
-/* ... your code here ... */
+
+.main {
+  gap: 3rem;
+  padding: 3rem;
+}
 
 
 /* ### TODO ### Styles for Tagging component */
 
-/* ... your code here ... */
+
 
 
 /* ### TODO ### Styles for Discovery component */
 
-/* ... your code here ... */
+
+
+
+.discovery__wrapper{
+  margin-top: 2rem;
+}
+
+.discovery__map {
+  display: flex;
+  flex-direction: column;
+}
+
+.discovery__results {
+  list-style: none;
+}
+.discovery__results li {
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  color: var(--link-color);
+  font-weight: bold;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+
+}
+
+.discovery input {
+  width: 40%;
+  min-width: 400px;
+}
+.discovery button {
+  width: 40%;
+  min-width: 400px;
+}
 
 
 /* ### TODO ### Styles for Footer Component */
 
-/* ... your code here ... */
+.footer {
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+
+  padding: 3rem;
+}
+
 
 
 /* ### TODO ### Media Queries */
 
-/* ... your code here ... */
+
+
+
+legend {
+  font-weight: bold;
+  font-size: 110%;
+  margin-left: 0.5rem;
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+input {
+  padding: 0.7rem;
+  min-width: 200px;
+}
+
+h2 {
+  margin-bottom: 1rem;
+}
+
+
+@media screen and (max-width: 950px) {
+  .row { flex-direction: column; }
+
+  .main__tagging {
+    width: 100%
+  }
+  .main__discovery {
+    width: 100%
+  }
+  .discovery__taglist {
+    width: 100%;
+  }
+  .discovery__map {
+    width: 100%;
+  }
+  
+
+
+  input {
+  width: 40%;
+  min-width: 300px;
+  }
+  button {
+  width: 40%;
+  min-width: 300px;
+  }
+}
