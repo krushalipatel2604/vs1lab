@@ -138,10 +138,38 @@ class MapManager {
  * TODO: 'updateLocation'
  * A function to retrieve the current location and update the page.
  * It is called once the page has been fully loaded.
+ * Auslesen der Position mit `findLocation`
+ * Im Erfolgsfall `latitude` und `longitude` Eingabefelder des Tagging-Formulars *und* 
+ * des Discovery-Formulars (versteckte Eingabefelder) suchen und in deren `value`-Attribute Koordinaten schreiben.
+ * Rufen sie die neue `updateLocation`-Funktion nach dem Laden des Dokuments automatisch auf.
  */
-// ... your code here ...
+// ... your code here ...1. Teilaufgabe: Koordinaten in die Formulare eintragen
+
+function updateLocation() {
+
+    LocationHelper.findLocation((helper) => {
+
+        //Felder suchen
+        const tagLatitude = document.getElementById('tag-latitude');
+        const tagLongitude = document.getElementById('tag-longitude');
+        const discoveryLatitude = document.getElementById('discovery-latitude');
+        const discoveryLongitude = document.getElementById('discovery-longitude');
+
+        //Werte eintragen wenn es die Felder gibt
+        if (tagLatitude) tagLatitude.value = helper.latitude;
+        if (tagLongitude) tagLongitude.value = helper.longitude;
+        if (discoveryLatitude) discoveryLatitude.value = helper.latitude;
+        if (discoveryLongitude) discoveryLongitude.value = helper.longitude;
+
+            console.log("Koordinaten wurden aktualisiert");
+
+    });
+
+}
+
 
 // Wait for the page to fully load its DOM content, then call updateLocation
 document.addEventListener("DOMContentLoaded", () => {
-    alert("Please change the script 'geotagging.js'");
+    //alert("Please change the script 'geotagging.js'");
+    window.onload = updateLocation();
 });
