@@ -30,7 +30,7 @@ var GEOLOCATION_API = {
 
 // This is the real API.
 // If there are problems with it, comment out the line.
-GEOLOCATION_API = navigator.geolocation;
+//GEOLOCATION_API = navigator.geolocation;
 
 /**
   * A class to help using the HTML5 Geolocation API.
@@ -146,7 +146,7 @@ class MapManager {
 // ... your code here ...1. Teilaufgabe: Koordinaten in die Formulare eintragen
 
 function updateLocation() {
-
+    console.log("Updating location...");
     LocationHelper.findLocation((helper) => {
 
         //Felder suchen
@@ -162,6 +162,23 @@ function updateLocation() {
         if (discoveryLongitude) discoveryLongitude.value = helper.longitude;
 
             console.log("Koordinaten wurden aktualisiert");
+
+        const mapImage = document.getElementById("mapView");
+        if(mapImage) {
+            mapImage.remove();
+            console.log("Alte Karte entfernt");
+        }
+        const mapContainer = document.getElementById("map");
+        const mapText = mapContainer.querySelector("span");
+
+        if(mapText) {
+            mapText.remove();
+            console.log("Alter Kartetext entfernt");
+        }
+        const mapManager = new MapManager();
+        mapManager.initMap(helper.latitude, helper.longitude);
+        mapManager.updateMarkers(helper.latitude, helper.longitude);
+
 
     });
 
