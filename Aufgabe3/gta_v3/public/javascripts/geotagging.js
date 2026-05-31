@@ -179,7 +179,6 @@ function updateLocation() {
         mapManager.initMap(helper.latitude, helper.longitude);
         //mapManager.updateMarkers(helper.latitude, helper.longitude);
 
-        mapManager.initMap(helper.latitude, helper.longitude);
 
         //leeres array als Standardwert vorbereiten
         let taglist = [];
