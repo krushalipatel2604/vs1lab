@@ -30,7 +30,7 @@ var GEOLOCATION_API = {
 
 // This is the real API.
 // If there are problems with it, comment out the line.
-//GEOLOCATION_API = navigator.geolocation;
+GEOLOCATION_API = navigator.geolocation;
 
 
 /**
@@ -88,7 +88,20 @@ function applyLocation(latitude, longitude) {
 
     const mapManager = new MapManager();
     mapManager.initMap(latitude, longitude);
-    mapManager.updateMarkers(latitude, longitude);
+
+    let taglist = [];
+    
+    // Prüfen, ob der Container existiert und das Attribut lesen
+    if (mapContainer) {
+        const tagsJSON = mapContainer.getAttribute('data-tags');
+        
+        if (tagsJSON) {
+            taglist = JSON.parse(tagsJSON);
+        }
+    }
+
+    // UpdateMarkers mit dem Parameter 'taglist' aufrufen
+    mapManager.updateMarkers(latitude, longitude, taglist);
 }
 
 // Wait for the page to fully load its DOM content, then call updateLocation
