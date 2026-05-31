@@ -30,7 +30,7 @@ var GEOLOCATION_API = {
 
 // This is the real API.
 // If there are problems with it, comment out the line.
-//GEOLOCATION_API = navigator.geolocation;
+GEOLOCATION_API = navigator.geolocation;
 
 /**
   * A class to help using the HTML5 Geolocation API.

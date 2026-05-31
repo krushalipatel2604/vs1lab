@@ -177,7 +177,23 @@ function updateLocation() {
         }
         const mapManager = new MapManager();
         mapManager.initMap(helper.latitude, helper.longitude);
-        mapManager.updateMarkers(helper.latitude, helper.longitude);
+        //mapManager.updateMarkers(helper.latitude, helper.longitude);
+
+        mapManager.initMap(helper.latitude, helper.longitude);
+
+        //leeres array als Standardwert vorbereiten
+        let taglist = [];
+
+        // Prüfen, ob der Container existiert und das Attribut lesen
+        if (mapContainer) {
+            const tagsJSON = mapContainer.getAttribute('data-tags');
+
+            if(tagsJSON) {
+                taglist = JSON.parse(tagsJSON);
+            }
+        }
+
+        mapManager.updateMarkers(helper.latitude, helper.longitude, taglist);
 
 
     });
@@ -188,5 +204,5 @@ function updateLocation() {
 // Wait for the page to fully load its DOM content, then call updateLocation
 document.addEventListener("DOMContentLoaded", () => {
     //alert("Please change the script 'geotagging.js'");
-    window.onload = updateLocation();
+    updateLocation();
 });
