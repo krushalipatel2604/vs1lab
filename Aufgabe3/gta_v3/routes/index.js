@@ -100,7 +100,7 @@ router.post('/discovery', (req, res) => {
     let result;
 
     if (searchterm && searchterm.trim() !== "") {
-        result = store.searchNearbyGeoTags(latitude, longitude, searchterm);
+        result = store.searchNearbyGeoTags(latitude, longitude, 0.1, searchterm);
     } else {
         result = store.getNearbyGeoTags(latitude, longitude);
     }
