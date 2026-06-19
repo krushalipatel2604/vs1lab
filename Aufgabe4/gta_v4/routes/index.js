@@ -40,7 +40,11 @@ const store = new GeoTagStore();
  */
 
 router.get('/', (req, res) => {
-  res.render('index', { taglist: [] })
+  res.render('index', {
+      taglist: [],
+      latitude: "",
+      longitude: ""
+  });
 });
 
 // API routes (A4)
