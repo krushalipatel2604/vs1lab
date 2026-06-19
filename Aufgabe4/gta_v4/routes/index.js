@@ -26,6 +26,7 @@ const GeoTag = require('../models/geotag');
  */
 // eslint-disable-next-line no-unused-vars
 const GeoTagStore = require('../models/geotag-store');
+const store = new GeoTagStore();
 
 // App routes (A3)
 
