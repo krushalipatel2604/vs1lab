@@ -62,6 +62,27 @@ router.get('/', (req, res) => {
  */
 
 // TODO: ... your code here ...
+router.get('/api/geotags', (req, res) => {
+    const { searchterm, latitude, longitude } = req.query;   //req.query contains the parameters attached to the url
+
+    //fetch all tags from the store
+    let results = store.getAllGeoTags();
+
+    // If both latitude and longitude are provided, filter by radius
+    if (latitude && longitude) {
+        results = store.searchNearbyGeoTags(latitude, longitude, 0.01, searchterm);
+    } 
+    // If only a searchterm is provided, filter the whole list
+    else if (searchterm) {
+        const kw = searchterm.toLowerCase(); //convert to lowercase before comparing
+        results = results.filter(tag => 
+            tag.name.toLowerCase().includes(kw) || 
+            (tag.hashtag && tag.hashtag.toLowerCase().includes(kw))
+        );
+    }
+    //convert the final list into JSON and send it back as the response
+    res.json(results);
+});
 
 
 /**
@@ -76,7 +97,21 @@ router.get('/', (req, res) => {
  */
 
 // TODO: ... your code here ...
+router.post('/api/geotags', (req, res) => {
+  //req.body contains the JSON data sent by the frontend's AJAX request
+    const { name, latitude, longitude, hashtag } = req.body;
+    
+    //create new tag object
+    const newTag = new GeoTag(name, latitude, longitude, hashtag);
+    
+    //add to store (which assigns the ID)
+    const savedTag = store.addGeoTag(newTag);
 
+    //return 201 means Created, set location header, and return the JSON
+    res.status(201)
+       .location(`/api/geotags/${savedTag.id}`)
+       .json(savedTag);
+});
 
 /**
  * Route '/api/geotags/:id' for HTTP 'GET' requests.
@@ -89,7 +124,16 @@ router.get('/', (req, res) => {
  */
 
 // TODO: ... your code here ...
-
+router.get('/api/geotags/:id', (req, res) => {
+  //req.params.id gets the id from the url
+    const tag = store.getGeoTagById(req.params.id);
+    //If the tag was found, send it back
+    if (tag) {
+        res.json(tag);
+    } else {
+        res.status(404).json({ message: "GeoTag not found" }); //If not, send 404 error
+    }
+});
 
 /**
  * Route '/api/geotags/:id' for HTTP 'PUT' requests.
@@ -106,7 +150,15 @@ router.get('/', (req, res) => {
  */
 
 // TODO: ... your code here ...
-
+router.put('/api/geotags/:id', (req, res) => {
+  //req.params.id: which tag should be updated and req.body: with what new data
+    const updatedTag = store.updateGeoTag(req.params.id, req.body);
+    if (updatedTag) {
+        res.json(updatedTag);
+    } else {
+        res.status(404).json({ message: "GeoTag not found" });
+    }
+});
 
 /**
  * Route '/api/geotags/:id' for HTTP 'DELETE' requests.
@@ -120,5 +172,17 @@ router.get('/', (req, res) => {
  */
 
 // TODO: ... your code here ...
+router.delete('/api/geotags/:id', (req, res) => {
+    //get tag before deleting to send it back
+    const deletedtag = store.getGeoTagById(req.params.id);
+    //delete tag
+    const success = store.removeGeoTagById(req.params.id);
+    
+    if (success) {
+        res.json(deletedtag); //wiederspruch readme line 50? here we send back the deleted object (readme says not to)
+    } else {
+        res.status(404).json({ message: "GeoTag not found" });
+    }
+});
 
 module.exports = router;
