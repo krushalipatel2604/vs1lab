@@ -108,4 +108,26 @@ function applyLocation(latitude, longitude) {
 document.addEventListener("DOMContentLoaded", () => {
     //alert("Please change the script 'geotagging.js'");
     window.onload = updateLocation();
+    
+    // Register event listeners for both forms
+    const tagForm = document.getElementById('tag-form');
+    const discoveryForm = document.getElementById('discoveryFilterForm');
+    
+    // Event listener for the tagging form
+    if (tagForm) {
+        tagForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent default form submission
+            console.log("Tagging form submitted - TODO: Add AJAX call");
+            // TODO: Add AJAX POST request with JSON data
+        });
+    }
+    
+    // Event listener for the discovery form
+    if (discoveryForm) {
+        discoveryForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent default form submission
+            console.log("Discovery form submitted - TODO: Add AJAX call");
+            // TODO: Add AJAX GET request with query parameters
+        });
+    }
 });
