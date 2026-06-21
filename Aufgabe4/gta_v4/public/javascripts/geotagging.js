@@ -32,6 +32,14 @@ var GEOLOCATION_API = {
 // If there are problems with it, comment out the line.
 GEOLOCATION_API = navigator.geolocation;
 
+function GeoTag(name, latitude, longitude, hashtag = null, id = null) {
+    this.name = name;
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.hashtag = hashtag;
+    this.id = id;
+}
+
 
 /**
  * TODO: 'updateLocation'
@@ -115,10 +123,39 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Event listener for the tagging form
     if (tagForm) {
-        tagForm.addEventListener('submit', (event) => {
+        tagForm.addEventListener('submit', async (event) => {
             event.preventDefault(); // Prevent default form submission
-            console.log("Tagging form submitted - TODO: Add AJAX call");
-            // TODO: Add AJAX POST request with JSON data
+
+            if (!tagForm.checkValidity()) {
+                tagForm.reportValidity();
+                return;
+            }
+
+            const name = document.getElementById('name').value;
+            const latitude = document.getElementById('tag-latitude').value;
+            const longitude = document.getElementById('tag-longitude').value;
+            const hashtag = document.getElementById('hashtag').value;
+
+            const geotag = new GeoTag(name, latitude, longitude, hashtag);
+
+            try {
+                const response = await fetch('/api/geotags', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(geotag)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Tagging request failed with status ${response.status}`);
+                }
+
+                const createdTag = await response.json();
+                console.log('Created GeoTag:', createdTag);
+            } catch (error) {
+                console.error('Error while sending GeoTag:', error);
+            }
         });
     }
     
