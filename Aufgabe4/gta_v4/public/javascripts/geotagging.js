@@ -161,10 +161,38 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Event listener for the discovery form
     if (discoveryForm) {
-        discoveryForm.addEventListener('submit', (event) => {
+        discoveryForm.addEventListener('submit', async (event) => {
             event.preventDefault(); // Prevent default form submission
-            console.log("Discovery form submitted - TODO: Add AJAX call");
-            // TODO: Add AJAX GET request with query parameters
+
+            if (!discoveryForm.checkValidity()) {
+                discoveryForm.reportValidity();
+                return;
+            }
+
+            const searchterm = document.getElementById('searchterm').value;
+            const latitude = document.getElementById('discovery-latitude').value;
+            const longitude = document.getElementById('discovery-longitude').value;
+
+            const queryParameters = new URLSearchParams({
+                searchterm: searchterm,
+                latitude: latitude,
+                longitude: longitude
+            });
+
+            try {
+                const response = await fetch(`/api/geotags?${queryParameters.toString()}`, {
+                    method: 'GET'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Discovery request failed with status ${response.status}`);
+                }
+
+                const geotags = await response.json();
+                console.log('Discovery results:', geotags);
+            } catch (error) {
+                console.error('Error while fetching discovery results:', error);
+            }
         });
     }
 });
