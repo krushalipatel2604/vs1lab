@@ -180,6 +180,20 @@ a {
   min-width: 400px;
 }
 
+/* Pagination controls styling */
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.pagination-controls button {
+    width: auto;
+    min-width: 80px; 
+    padding: 0.25rem 0.75rem;
+}
+
 
 /* ### TODO ### Styles for Footer Component */
 
@@ -218,6 +232,7 @@ input {
 h2 {
   margin-bottom: 1rem;
 }
+
 
 
 @media screen and (max-width: 950px) {

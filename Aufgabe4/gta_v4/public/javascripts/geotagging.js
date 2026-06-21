@@ -40,6 +40,14 @@ function GeoTag(name, latitude, longitude, hashtag = null, id = null) {
     this.id = id;
 }
 
+//run once the page loads
+let mapManager = null;
+let mapInitialized = false;
+
+let currentPage = 1;
+let currentTotalPages = 1;
+const pageLimit = 3; //number of items per page for pagination
+
 
 /**
  * TODO: 'updateLocation'
@@ -93,9 +101,12 @@ function applyLocation(latitude, longitude) {
         const mapText = mapContainer.querySelector("p, span");
         if (mapText) mapText.remove();
     }
+    if(!mapInitialized) {
+        mapManager = new MapManager();
+        mapManager.initMap(latitude, longitude);
+        mapInitialized = true;
+    }
 
-    const mapManager = new MapManager();
-    mapManager.initMap(latitude, longitude);
 
     let taglist = [];
     
@@ -120,7 +131,9 @@ function getDiscoverySearchParameters() {
     return new URLSearchParams({
         searchterm: searchterm,
         latitude: latitude,
-        longitude: longitude
+        longitude: longitude,
+        page: currentPage,
+        limit: pageLimit
     });
 }
 
@@ -136,6 +149,55 @@ function updateDiscoveryResults(geotags) {
             discoveryResults.appendChild(listItem);
         }
     }
+}
+
+async function goToPreviousPage() {
+    if(currentPage <= 1) {
+        return; //already on the first page, do nothing
+    }
+    currentPage--;
+    await refreshDiscoveryWidget();
+}
+
+async function goToNextPage() {
+    if(currentPage >= currentTotalPages) {
+        return; //already on the last page, do nothing
+    }
+    currentPage++;
+    await refreshDiscoveryWidget();
+}
+
+
+function updatePaginationControls(paginationData) {
+    const paginationControls = document.getElementById('paginationControls');
+
+    if (!paginationControls) {
+        return;
+    }
+
+    currentPage = paginationData.page;
+    currentTotalPages = paginationData.totalPages;
+
+    paginationControls.innerHTML = ''; // Clear existing controls
+
+    const prevButton = document.createElement('button');
+    prevButton.textContent = 'Zurück';
+    prevButton.type = 'button';
+    prevButton.disabled = paginationData.page <= 1;
+    prevButton.addEventListener('click', goToPreviousPage);
+
+    const pageInfo = document.createElement('span');
+    pageInfo.textContent = ' Seite ' + currentPage + ' von ' + currentTotalPages + ' ';
+
+    const nextButton = document.createElement('button');
+    nextButton.textContent = 'Weiter';
+    nextButton.type = 'button';
+    nextButton.disabled = paginationData.page >= paginationData.totalPages;
+    nextButton.addEventListener('click', goToNextPage);
+
+    paginationControls.appendChild(prevButton);
+    paginationControls.appendChild(pageInfo);
+    paginationControls.appendChild(nextButton);
 }
 
 function updateDiscoveryMap(geotags) {
@@ -159,8 +221,11 @@ function updateDiscoveryMap(geotags) {
         }
     }
 
-    const mapManager = new MapManager();
-    mapManager.initMap(latitude, longitude);
+    if(!mapInitialized) {
+        mapManager = new MapManager();
+        mapManager.initMap(latitude, longitude);
+        mapInitialized = true;
+    }
     mapManager.updateMarkers(latitude, longitude, geotags);
 }
 
@@ -175,16 +240,25 @@ async function refreshDiscoveryWidget() {
         throw new Error(`Discovery request failed with status ${response.status}`);
     }
 
-    const geotags = await response.json();
+    const paginationData = await response.json();
+
+    currentTotalPages = paginationData.totalPages;
+    currentPage = paginationData.page;
+
+    const geotags = paginationData.items;
+
     updateDiscoveryResults(geotags);
     updateDiscoveryMap(geotags);
-    return geotags;
+    updatePaginationControls(paginationData);
+
+    return paginationData;
 }
 
 // Wait for the page to fully load its DOM content, then call updateLocation
 document.addEventListener("DOMContentLoaded", () => {
     //alert("Please change the script 'geotagging.js'");
-    window.onload = updateLocation();
+    
+    updateLocation(); // Update location once the page has loaded
     
     // Register event listeners for both forms
     const tagForm = document.getElementById('tag-form');
@@ -223,6 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const createdTag = await response.json();
                 console.log('Created GeoTag:', createdTag);
 
+                currentPage = 1; // Reset to first page to show the newly added tag
                 await refreshDiscoveryWidget();
             } catch (error) {
                 console.error('Error while sending GeoTag:', error);
@@ -241,8 +316,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             try {
-                const geotags = await refreshDiscoveryWidget();
-                console.log('Discovery results:', geotags);
+                currentPage = 1; // Reset to first page on new search
+                const paginationData = await refreshDiscoveryWidget();
+                console.log('Discovery results:', paginationData);
             } catch (error) {
                 console.error('Error while fetching discovery results:', error);
             }

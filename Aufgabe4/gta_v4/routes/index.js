@@ -28,6 +28,11 @@ const GeoTag = require('../models/geotag');
 const GeoTagStore = require('../models/geotag-store');
 const store = new GeoTagStore();
 
+/**
+ * The module "geotag-store" exports a class PaginatedGeoTagResult. 
+ * It represents paginated results for GeoTags.
+ */
+const PaginatedGeoTagResult = require('../models/paginated-geotag-result');
 // App routes (A3)
 
 /**
@@ -62,8 +67,15 @@ router.get('/', (req, res) => {
  */
 
 // TODO: ... your code here ...
+//returns an object now instead of an array
 router.get('/api/geotags', (req, res) => {
     const { searchterm, latitude, longitude } = req.query;   //req.query contains the parameters attached to the url
+
+    let page = parseInt (req.query.page) || 1; //default to page 1 if not provided
+    let limit = 3; //change limit here if you want more items per page
+
+    //to prevent 0 or negative values for page and limit which would break the pagination logic
+    page = Math.max(page, 1);
 
     //fetch all tags from the store
     let results = store.getAllGeoTags();
@@ -80,8 +92,20 @@ router.get('/api/geotags', (req, res) => {
             (tag.hashtag && tag.hashtag.toLowerCase().includes(kw))
         );
     }
+
+    //pagination logic
+    const totalItems = results.length;
+    const totalPages = Math.max(1, Math.ceil(totalItems / limit)); //at least 1 page even if there are no items
+
+    page = Math.min(page, totalPages); //randfall: if requested page exceeds total pages, return last page
+    
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const pagedResults = results.slice(startIndex, endIndex);  //extract the items for the current page
+
     //convert the final list into JSON and send it back as the response
-    res.json(results);
+    const paginatedResult = new PaginatedGeoTagResult(pagedResults, page, limit, totalItems);
+    res.json(paginatedResult);
 });
 
 
