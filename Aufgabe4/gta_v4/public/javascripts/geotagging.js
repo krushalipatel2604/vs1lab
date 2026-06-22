@@ -46,8 +46,6 @@ let mapInitialized = false;
 
 let currentPage = 1;
 let currentTotalPages = 1;
-const pageLimit = 3; //number of items per page for pagination
-
 
 /**
  * TODO: 'updateLocation'
@@ -132,8 +130,7 @@ function getDiscoverySearchParameters() {
         searchterm: searchterm,
         latitude: latitude,
         longitude: longitude,
-        page: currentPage,
-        limit: pageLimit
+        page: currentPage
     });
 }
 

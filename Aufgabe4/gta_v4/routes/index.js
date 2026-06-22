@@ -72,7 +72,7 @@ router.get('/api/geotags', (req, res) => {
     const { searchterm, latitude, longitude } = req.query;   //req.query contains the parameters attached to the url
 
     let page = parseInt (req.query.page) || 1; //default to page 1 if not provided
-    let limit = 3; //change limit here if you want more items per page
+    const limit = 3; //change limit here if you want more items per page
 
     //to prevent 0 or negative values for page and limit which would break the pagination logic
     page = Math.max(page, 1);
